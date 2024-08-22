@@ -1,0 +1,60 @@
+2024-05-19 09:10:22,046 INFO     tuned.daemon.application: TuneD: 2.21.0, kernel: 5.14.0-362.8.1.el9_3.x86_64
+2024-05-19 09:10:22,046 INFO     tuned.daemon.application: dynamic tuning is globally disabled
+2024-05-19 09:10:22,065 INFO     tuned.daemon.daemon: using sleep interval of 1 second(s)
+2024-05-19 09:10:22,065 INFO     tuned.daemon.daemon: Running in automatic mode, checking what profile is recommended for your configuration.
+2024-05-19 09:10:22,921 INFO     tuned.daemon.daemon: Using 'virtual-guest' profile
+2024-05-19 09:10:22,923 INFO     tuned.profiles.loader: loading profile: virtual-guest
+2024-05-19 09:10:22,934 INFO     tuned.daemon.controller: starting controller
+2024-05-19 09:10:22,934 INFO     tuned.daemon.daemon: starting tuning
+2024-05-19 09:10:22,943 INFO     tuned.plugins.base: instance cpu: assigning devices cpu1, cpu0
+2024-05-19 09:10:22,945 INFO     tuned.plugins.plugin_cpu: We are running on an x86 GenuineIntel platform
+2024-05-19 09:10:22,950 WARNING  tuned.plugins.plugin_cpu: your CPU doesn't support MSR_IA32_ENERGY_PERF_BIAS, ignoring CPU energy performance bias
+2024-05-19 09:10:22,963 INFO     tuned.plugins.plugin_disk: Device 'nvme0n1' not supported by hdparm
+2024-05-19 09:10:22,969 INFO     tuned.plugins.plugin_disk: Device 'dm-0' not supported by hdparm
+2024-05-19 09:10:22,973 INFO     tuned.plugins.plugin_disk: Device 'dm-1' not supported by hdparm
+2024-05-19 09:10:22,974 INFO     tuned.plugins.base: instance disk: assigning devices nvme0n1, dm-1, dm-0
+2024-05-19 09:10:22,977 INFO     tuned.plugins.plugin_sysctl: reapplying system sysctl
+2024-05-19 09:10:22,977 INFO     tuned.daemon.daemon: static tuning from profile 'virtual-guest' applied
+2024-05-19 09:10:26,211 INFO     tuned.daemon.controller: terminating controller
+2024-05-19 09:10:26,212 INFO     tuned.daemon.daemon: stopping tuning
+2024-05-19 09:10:26,282 INFO     tuned.daemon.daemon: terminating TuneD, rolling back all changes
+2024-06-08 14:54:29,439 INFO     tuned.daemon.application: TuneD: 2.21.0, kernel: 5.14.0-362.8.1.el9_3.x86_64
+2024-06-08 14:54:29,440 INFO     tuned.daemon.application: dynamic tuning is globally disabled
+2024-06-08 14:54:29,455 INFO     tuned.daemon.daemon: using sleep interval of 1 second(s)
+2024-06-08 14:54:29,456 INFO     tuned.daemon.daemon: Running in automatic mode, checking what profile is recommended for your configuration.
+2024-06-08 14:54:30,111 INFO     tuned.daemon.daemon: Using 'virtual-guest' profile
+2024-06-08 14:54:30,112 INFO     tuned.profiles.loader: loading profile: virtual-guest
+2024-06-08 14:54:30,120 INFO     tuned.daemon.controller: starting controller
+2024-06-08 14:54:30,120 INFO     tuned.daemon.daemon: starting tuning
+2024-06-08 14:54:30,129 INFO     tuned.plugins.base: instance cpu: assigning devices cpu0, cpu1
+2024-06-08 14:54:30,131 INFO     tuned.plugins.plugin_cpu: We are running on an x86 GenuineIntel platform
+2024-06-08 14:54:30,136 WARNING  tuned.plugins.plugin_cpu: your CPU doesn't support MSR_IA32_ENERGY_PERF_BIAS, ignoring CPU energy performance bias
+2024-06-08 14:54:30,145 INFO     tuned.plugins.plugin_disk: Device 'nvme0n1' not supported by hdparm
+2024-06-08 14:54:30,152 INFO     tuned.plugins.plugin_disk: Device 'dm-0' not supported by hdparm
+2024-06-08 14:54:30,159 INFO     tuned.plugins.plugin_disk: Device 'dm-1' not supported by hdparm
+2024-06-08 14:54:30,160 INFO     tuned.plugins.base: instance disk: assigning devices nvme0n1, dm-0, dm-1
+2024-06-08 14:54:30,169 INFO     tuned.plugins.plugin_sysctl: reapplying system sysctl
+2024-06-08 14:54:30,173 INFO     tuned.daemon.daemon: static tuning from profile 'virtual-guest' applied
+2024-06-08 14:54:32,851 INFO     tuned.daemon.controller: terminating controller
+2024-06-08 14:54:32,852 INFO     tuned.daemon.daemon: stopping tuning
+2024-06-08 14:54:32,881 INFO     tuned.daemon.daemon: terminating TuneD, rolling back all changes
+2024-06-08 16:37:30,376 INFO     tuned.daemon.application: TuneD: 2.22.1, kernel: 5.14.0-427.20.1.el9_4.x86_64
+2024-06-08 16:37:30,377 INFO     tuned.daemon.application: dynamic tuning is globally disabled
+2024-06-08 16:37:30,396 INFO     tuned.daemon.daemon: using sleep interval of 1 second(s)
+2024-06-08 16:37:30,397 INFO     tuned.daemon.daemon: Running in automatic mode, checking what profile is recommended for your configuration.
+2024-06-08 16:37:32,655 INFO     tuned.daemon.daemon: Using 'virtual-guest' profile
+2024-06-08 16:37:32,660 INFO     tuned.profiles.loader: loading profile: virtual-guest
+2024-06-08 16:37:32,678 INFO     tuned.daemon.controller: starting controller
+2024-06-08 16:37:32,678 INFO     tuned.daemon.daemon: starting tuning
+2024-06-08 16:37:32,697 INFO     tuned.plugins.base: instance cpu: assigning devices cpu0, cpu1
+2024-06-08 16:37:32,702 INFO     tuned.plugins.plugin_cpu: We are running on an x86 GenuineIntel platform
+2024-06-08 16:37:32,720 WARNING  tuned.plugins.plugin_cpu: your CPU doesn't support MSR_IA32_ENERGY_PERF_BIAS, ignoring CPU energy performance bias
+2024-06-08 16:37:32,746 INFO     tuned.plugins.plugin_disk: Device 'nvme0n1' not supported by hdparm
+2024-06-08 16:37:32,757 INFO     tuned.plugins.plugin_disk: Device 'dm-0' not supported by hdparm
+2024-06-08 16:37:32,771 INFO     tuned.plugins.plugin_disk: Device 'dm-1' not supported by hdparm
+2024-06-08 16:37:32,771 INFO     tuned.plugins.base: instance disk: assigning devices dm-0, nvme0n1, dm-1
+2024-06-08 16:37:32,782 INFO     tuned.plugins.plugin_sysctl: reapplying system sysctl
+2024-06-08 16:37:32,783 INFO     tuned.daemon.daemon: static tuning from profile 'virtual-guest' applied
+2024-06-08 16:37:33,779 INFO     tuned.daemon.controller: terminating controller
+2024-06-08 16:37:33,779 INFO     tuned.daemon.daemon: stopping tuning
+2024-06-08 16:37:33,844 INFO     tuned.daemon.daemon: terminating TuneD, rolling back all changes

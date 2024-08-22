@@ -1,0 +1,1 @@
+echo "/-     /etc/auto.direct" > /etc/auto.master.d/direct.autofs
