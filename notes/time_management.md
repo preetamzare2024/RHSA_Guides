@@ -74,3 +74,52 @@ The job must run only from one day before to one day after the current time. The
 ```bash
 H M DayoftheMonth Month DayoftheWeek
 */2 * * * Fri-Sun /usr/bin/date >> /home/student/my_first_cron_job.txt
+````
+
+--------------------------------------------------------------------------------------------------------------
+
+## Anacron
+
+Do you want to run a job even if the machine is rebooted or unavailable for specific period of time. Or you want to ensure a specific job always run, then Anacron is the answer. Anacron is configured in `/etc/anacron` and its contains are below.
+
+```bash
+/poseidon\ 16:40:08 ~ $ cat /etc/anacrontab
+# /etc/anacrontab: configuration file for anacron
+
+# See anacron(8) and anacrontab(5) for details.
+
+SHELL=/bin/sh
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+# the maximal random delay added to the base delay of the jobs
+RANDOM_DELAY=45
+# the jobs will be started during the following hours only
+START_HOURS_RANGE=3-22
+
+#period in days   delay in minutes   job-identifier   command
+1   5   cron.daily  nice run-parts /etc/cron.daily
+7   25  cron.weekly nice run-parts /etc/cron.weekly
+@monthly 45 cron.monthly  nice run-parts /etc/cron.monthly
+```
+
+The important part of this file is the last three lines. You might notice `nice` command in the above file as well.
+
+```bash
+/poseidon\ 16:47:52 ~ $ sudo tree /var/spool/cron/
+sudo tree /var/spool/cron/
+/var/spool/cron/
+└── poseidon
+
+0 directories, 1 file
+/poseidon\ 16:48:03 ~ $ sudo tree /var/spool/anacron/
+/var/spool/anacron/
+├── cron.daily
+├── cron.monthly
+└── cron.weekly
+
+```
+
+### How to find if the job has ran?
+
+When the crond daemon starts a job from the /etc/anacrontab file, it updates the timestamps of those files. With this timestamp, you can determine the last time that the job executed.
+
