@@ -74,7 +74,7 @@ The job must run only from one day before to one day after the current time. The
 ```bash
 H M DayoftheMonth Month DayoftheWeek
 */2 * * * Fri-Sun /usr/bin/date >> /home/student/my_first_cron_job.txt
-````
+```
 
 --------------------------------------------------------------------------------------------------------------
 
@@ -116,10 +116,30 @@ sudo tree /var/spool/cron/
 ├── cron.daily
 ├── cron.monthly
 └── cron.weekly
-
 ```
 
 ### How to find if the job has ran?
 
 When the crond daemon starts a job from the /etc/anacrontab file, it updates the timestamps of those files. With this timestamp, you can determine the last time that the job executed.
 
+### Crontab format
+
+Below you will find you the format of cronjob very well explained.
+
+```bash
+/poseidon\ 16:58:44 ~ $ cat /etc/crontab
+SHELL=/bin/bash
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+MAILTO=root
+
+# For details see man 4 crontabs
+
+# Example of job definition:
+# .---------------- minute (0 - 59)
+# |  .------------- hour (0 - 23)
+# |  |  .---------- day of month (1 - 31)
+# |  |  |  .------- month (1 - 12) OR jan,feb,mar,apr ...
+# |  |  |  |  .---- day of week (0 - 6) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+# |  |  |  |  |
+# *  *  *  *  * user-name  command to be executed
+```

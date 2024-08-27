@@ -13,9 +13,12 @@
 
 ```bash
 # below command sets the nice value to default + 10 i.e. NI=10
-poseidon 05:52:17 ~ $ ps -o pid,comm,nice 2087
+
+[ /poseidon\ 17:08:03 ~ $ ] nice sleep 180s &
+[1] 2160
+[ /poseidon\ 17:09:10 ~ $ ] ps -o pid,comm,nice 2160
     PID COMMAND          NI
-   2087 sleep            10
+   2160 sleep            10
 ```
 
 - it means if you run a command with using nice, it will take a default value of Zero because it is value of the parent process.
