@@ -1,14 +1,140 @@
 # Command from Mac Pro
 
 ```bash
-podman run -d --name mycontainer -p 8080:8080 pathtothecontainerimage
-echo "Hello from container2" >/home/web1/index.html
-podman run -d --name mycontainer2 -p 8081:8080 -v /home/web1:/var/www/html:Z pathtothecontainerimage
 
+# basic commands
+
+# check what is configured in /etc/containers/registries.conf
+# you can also create you own registries.conf file using the following procedure
+
+# step:01
+mkdir -pv ~/.config/containers
+cd ~/.config/containers
+vim registries.conf
+
+# the content of registries.conf file you can pick from the /etc/containers/registries.conf
+# At high level you need
+# - unqualified-search-registries = ["registry.access.redhat.com", "registry.redhat.io", "docker.io"]
+     # [[registries]]
+     # location = "registry.redhat.io"
+     # insecure = false
+     # blocked = false
+
+# step:02
+podman login # remember to configure the registries.conf file in your home directory as mentioned above, or you must give full qualified name
+
+# step:03 since i do not remember name of the image, you can start with httpd
+podman search httpd
+
+# I'm avoid output because it creates a clutter. So, now when you run this image, you can pick anything which starts with ubi, i choose ubi9/httpd-24
+# now since you have only registry.redhat.io configured in the registry, you do not need to give complete path
+
+# step:04 
+podman pull ubi9/httpd-24
+
+# step:05 Now we have pulled the image, we can check the image.
+podman images
+
+# step:06 now run the container using the image, 
+# let me explain the flag
+     # --rm will remove the image if you stop the container
+     # -p is port, localport 8090 will get redirected to 8080
+     # -d in detached mode
+     # finally the name of the image
+     # and I'm avoiding flag --name to give name to the container
+
+podman run --rm -d -p 8090:8080 ubi9/httpd-24
+
+# step: 07 check the container status using
+podman ps
+# or 
+podman ps --all # this is esp required when the container exits immediately, since it is httpd, you do not have to
+
+# step: 08 check if the default web page is available
+
+curl http://localhost:8090
+
+# step: 09 check the logs of the container
 # check what is gone wrong with container or why it has exited
-podman logs nameofthecontainer
-# or
+# 
 podman container logs nameofthecontainer
+
+# step: 10 stop the container and since we used --rm flag, container will also be deleted
+
+podman stop nameofthecontainer
+
+# this means, when you stop the container and run podman ps --all, you will not find this container at all.
+
+```
+
+## Advance concepts
+
+The most important concept which i would describe below is how to map storage inside the container.
+For this you need to ensure you have index.html file and it has right selinux permission.
+
+```bash
+# step: 01 create folder
+mkdir -pv web1
+# step: 02 create a smaple index file
+echo "Hello from container2" >/home/web1/index.html
+# step: 03 run the container and point it to local storage using -v option. Do remember that in the below example
+#    /home/web1 is directed to /var/www/html, you also do otherwise /mkdir -pv home/web1/html and the copy index.html into html directory
+#    point /home/web1:/var/www:Z
+podman run -d --rm --name mycontainer2 -p 8090:8080 -v /home/web1:/var/www/html:Z pathtothecontainerimage
+
+```
+
+### Additional concept
+
+you can also start and stop the container when the system is rebooted. There are two things you need to do for it
+
+- ensure the container is running e.g. in my case mycontainer2
+- create .service file
+- start the service
+- use loginctl enable-linger (this ensures that container is started in non-interactive way i.e. you do not have login to start the container)
+
+```bash
+# create a service
+
+# step:01 create a folder in .config directory
+
+mkdir -pv .config/systemd/user
+cd .config/systemd/user
+
+# step:02 create a .service file
+podman generate systemd --files --new --name mycontainer2
+
+# now stop the container using
+podman stop mycontainer2
+
+# step:03 reload systemd 
+
+systemctl --user daemon-reload
+
+# step:04 enable and start the container
+systemctl --user enable --now container-web01.service
+
+     # check the status of the container
+     systemctl --user status container-web01.service
+     # or
+     podman ps
+
+# step:05 enable container service to start in non-interactive way
+
+loginctl enable-linger
+
+# check
+loginctl show-user $(whoami)
+
+# reboot the machine
+# wait 5 minutes
+# if possible, open http://nameofthevm:8090
+
+
+```
+
+
+```bash
 
 podman info  --format {{ .Host.NetworkBackend }}
 podman network ls
