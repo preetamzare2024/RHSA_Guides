@@ -1,8 +1,6 @@
 # Journalctl
 
-This is the most important command. Lot of things to learn here for troubleshooting
-
-first journalctl always start with message old to new. But almost, always we are interested in last logged message. You can achieve this using
+This is the most important command. Lot of things to learn here for troubleshooting purposes. First journalctl always start with messages from old to new. But almost, always we are interested in last logged messages. You can achieve this using
 
 `journalctl -r`
 
@@ -13,21 +11,21 @@ Remember `journalctl` always run in less mode, but in case you wish tail the log
 Now, you wish to search for error messages, remember the priority thing we learnt in rsyslog lesson. This information comes handy here. And this is how
 
 `journalctl --priority err`
+
 `journalctl --priority warning`
 
 you can also use `-u` to mentioned the service or user.
 
-In case you wish to check what logged since last one hour.
+In case you wish to check what was logged since last one hour.
 
 `journalctl --priority err --since "-1 hour"`
 
-In short, try to think journalctl is same as tail, why see below similarities
+In short, try to think journalctl is same as tail, why?  See below similarities
 
 ```bash
 
 journalctl -f
 journalctl -n 10
-journalctl -
 
 ```
 
