@@ -1,0 +1,14 @@
+> cat ~/.ssh/config                                                                                                                                                                                                                                                            (main|…1)
+Host 192.168.50.245
+	HostName 192.168.50.245
+	User poseidon
+	IdentityFile ~/.ssh/poseidon
+	AddKeysToAgent yes
+	UseKeychain yes
+
+Host 192.168.50.235
+	HostName 192.168.50.235
+	IdentityFile ~/.ssh/poseidon
+	User poseidon
+	AddKeysToAgent yes
+	UseKeyChain yes
