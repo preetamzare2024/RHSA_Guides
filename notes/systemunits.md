@@ -62,15 +62,17 @@ or type
 In case you are wondering what other targets are available, you can use the following command
 
 ```bash
-
 systemctl list-units --type=target
-
 ```
 
 The most important targets are 
 
 - multi-user.target
 - graphical.target
-- rescue.target
-- emergency.target
+- rescue.target - required root password and can be used to fix fstab entries
+- emergency.target - requires root password
 
+The emergency target keeps the root file system mounted read-only, 
+while the rescue target waits for the sysinit.target unit to complete, so that more of the system is initialized, 
+such as the logging service or the file systems. 
+The root user at this point cannot change /etc/fstab until the drive is remounted in a read write state with the mount -o remount,rw / command.
