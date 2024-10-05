@@ -1,8 +1,22 @@
 # Podman and containers
 
-Little bit about podman to manage containers
+OCI stands for Open Container Initiative
+Container Image is all you need to run containers, but containers are run using container runtime (container engine) e.g Docker or Podman...etc
 
-## basic commands
+Container Image is a Tar archive
+
+Little bit about podman to manage containers
+In case, you wish to know on which port containers is running i.e. what are the exposed ports? just run, 
+
+```bash
+podman inspect <imagename> | grep Config -A 25
+```
+
+you need to know exposed port, environmental variables and entry point.
+
+## Basic Commands
+
+Read man pages for podman using podman-<command_name> e.g. man podman-login
 
 Check what is configured in /etc/containers/registries.conf, You can also create you own registries.conf file using the following procedure
 
@@ -19,7 +33,15 @@ vim registries.conf
      # location = "registry.redhat.io"
      # insecure = false
      # blocked = false
+```
 
+To confirm registries configuration is indeed setup, you can you parse the file using the following command
+
+```bash
+podman info | grep registries -A 10 -n
+```
+
+```bash
 # step:02
 podman login 
 # remember to configure the registries.conf file in your home directory as mentioned above, 
@@ -74,7 +96,18 @@ podman container logs nameofthecontainer
 podman stop nameofthecontainer
 
 # this means, when you stop the container and run podman ps --all, 
-# you will not find this container at all.
+# you will not find this container at all because we used --rm flag
+# you also add a tag --time=x where x stands for number of seconds which allow container to gracefully stop.
+
+# forcefully stop the container
+
+podman rm nameofthecontainer -f # here the container is not stopped with -f flag it is force to stop and kill
+
+# last option is kill
+
+podman kill nameofthecontainer
+
+# you can pause the container, and restart the container.
 
 ```
 
@@ -92,14 +125,47 @@ echo "Hello from container2" >/home/web1/index.html
 
 # step: 03 run the container and point it to local storage using -v option. 
 # Do remember that in the below example
-# /home/web1 is directed to /var/www/html, you can also do otherwise /mkdir -pv home/web1/html
-# and the copy index.html into html directory and point it as this --> /home/web1:/var/www:Z
-
+# /home/web1 is directed to /var/www/html, please note you have to ensure source directory is mapped to the destination directory.
+# or you can simple man /home/web1 to /var/www/
+# Mount the /home/web1 directory from the host to the /var/www directory in the container.
 podman run -d --rm --name mycontainer2 -p 8090:8080 -v /home/web1:/var/www/html:Z pathtothecontainerimage
 
 ```
 
-### Additional concept
+### Additional example of mounting storage using mysql
+
+- First we need to create a directory e.g. /home/poseidon/mydb
+- assign permission to mysql user. For that you must know the UID of mysql. It is normally 27, you can find the information in `podman inspect <containerimagename>`
+  - assign permission is done via podman command
+
+```bash
+podman unshare chown 27:27 /home/poseidon/mydb00
+```
+
+- run the container using the following using the following command
+
+```bash
+
+podman run --detach -e MYSQL_USER=student \
+-e MYSQL_PASSWORD=student123 \
+-e MYSQL_DATABASE=db01 \
+-e MYSQL_ROOT_PASSWORD=student321 \
+-v /home/poseidon/mysqldb01:/var/lib/mysql \
+registry.redhat.io/rhel9/mysql-80
+
+# The above command fails because we are not using selinux, also try to find more information about the image esp environment variables using podman inspect <imagename> | grep usage
+
+podman run --detach -e MYSQL_USER=student \
+-e MYSQL_PASSWORD=student123 \
+-e MYSQL_DATABASE=db01 \
+-e MYSQL_ROOT_PASSWORD=student321 \
+-v /home/poseidon/mysqldb01:/var/lib/mysql:Z \
+registry.redhat.io/rhel9/mysql-80
+
+
+```
+
+### Additional Concept
 
 You can also start and stop the container when the system is rebooted. There are two things you need to do for it
 
@@ -143,12 +209,25 @@ loginctl show-user $(whoami)
 # wait 5 minutes
 # if possible, open http://nameofthevm:8090 from your local machine
 
+
 ```
+
+Things to remember, systemctl --user option and where to create directory because systemctl --user option is going to look for that directory.
+
+Another thing, how to disable this is not documented.
+
+As of today (when my memory is fresh), it is so simple. Disable systemctl --user service name and then simply delete the file in the .config/systemd/user folder.
 
 
 ```bash
 
+# by default format is json, you can use the same command with podman inspect
 podman info  --format {{ .Host.NetworkBackend }}
+
+# double curl brackets is the something i also seen in ansible. In the above command, you see space after curly bracket.
+# You do not need this space.
+podman inspect 668d5331f2b7 --format "{{ .State.Status }}"
+
 podman network ls
 
 skopeo inspect docker://registry.access.redhat.com/rhel8/mariadb-1011 | grep usage
@@ -227,3 +306,5 @@ podman run -d --name redbsrv01 -e MYSQL_USER=preetam -e MYSQL_PASSWORD=VMware1\!
 -p 3306:3306 -v /home/vagrant/redb01_data:/usr/lib/mysql:Z --network db_net registry.access.redhat.com/rhel8/mariadb-1011
 
 ```
+
+podman logs <nameofthecontainer> to get the log info
