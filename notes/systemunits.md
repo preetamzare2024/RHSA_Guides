@@ -1,10 +1,11 @@
 # Systemunits
 
+Targets group units together.
 List all units available in a system use the following command
 
-type could be path, slice, mount, timer, service, automount, scope, socket, target
 
 ```bash
+# type could be path, slice, mount, timer, service, automount, scope, socket, target
 systemctl list-units --type=path
 
 systemctl list-automounts
@@ -69,10 +70,49 @@ The most important targets are
 
 - multi-user.target
 - graphical.target
-- rescue.target - required root password and can be used to fix fstab entries
+- rescue.target - requires root password and can be used to fix fstab entries
 - emergency.target - requires root password
 
-The emergency target keeps the root file system mounted read-only, 
-while the rescue target waits for the sysinit.target unit to complete, so that more of the system is initialized, 
-such as the logging service or the file systems. 
-The root user at this point cannot change /etc/fstab until the drive is remounted in a read write state with the mount -o remount,rw / command.
+The emergency target keeps the root file system mounted read-only, while the rescue target waits for the sysinit.target unit to complete, so that more of the system is initialized, such as the logging service or the file systems. The root user at this point cannot change /etc/fstab until the drive is remounted in a read write state with the mount -o remount,rw / command.
+
+## List Unit Dependencies
+
+In case you wish to know what are things required for a specific unit to start
+
+```bash
+
+systemctl list-dependencies sshd.service
+
+# reverse dependencies provide info about that has started this service
+systemctl list-dependencies sshd.service --reverse
+
+[sugrible@servera ~]$ systemctl list-dependencies sshd.service --reverse
+sshd.service
+● └─multi-user.target # <--- dot suggests that multi-user is active
+○   └─graphical.target
+
+# incase graphical interface is installed, you see the output as below
+$ systemctl list-dependencies sshd.service --reverse
+sshd.service
+● └─multi-user.target # here dot is filled
+●   └─graphical.target # here as the dot is filled.
+
+```
+
+To find out the default target, just use the command `systemctl get-default`
+
+In case you wish to change the default target, you can use `systemctl set-default <nameofthetarget>`
+
+In case you wish to make one time change to the target you can use boot menu and add the end of line which starts `linux` type systemd.unit=<name_ofthe_target>, you can always find out what was the parameters passed to the kernel using `cat /proc/cmdline`
+
+### Isolating
+Isolating is another thing which you need to know. And there is dependencies between `systemctl list-dependencies unit.name` with this command, you know target which is starting the unit, there are also another target started e.g. basic target is started when you list the following command
+
+`systemctl list-dependencies graphical.target`
+
+So when you execute a command 
+
+systemctl isolate <targetname>, you are indirectly saying, only the target must run, anything and everything must stop e.g. basic.target is actually started by graphical.target, if i say the following
+
+systemctl isolate basic.target
+
