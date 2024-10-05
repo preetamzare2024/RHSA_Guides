@@ -9,12 +9,27 @@ Grub config which we are allowed to modify or customize is under
 
 Under this file, you will find GRUB_TIMEOUT parameter.
 
-Step:01 - Modify this parameter as per your wish.
-Step:02 - update grub file using the following command
+## Step:01 - Modify timeout parameter as per your wish.
+
+```bash
+
+sudo vim /etc/default/grub 
+# change GRUB_TIMEOUT, in case forget where this file is located,
+# check grub2.cfg file under /etc/grub2.cfg
+
+```
+
+## Step:02 - update grub file using the following command
+
+```bash
+# in case you forgot the location of the file, simply do ls -l /etc/grub2.cfg, because this file is symlined to the /boot/grub2/grub.cfg
 
 sudo grub2-mkconfig -o /boot/grub2/grub.cfg
+```
 
-Step:03 
+## Step:03 
+
+The actual root filesystem is mounted under /sysroot and sysroot is mounted as read only. So always remember to remount sysroot and then change the root to sysroot.
 
 - reboot the machine and press any key and then press `e`
 - find the line starting with linux and at the end type rd.break
